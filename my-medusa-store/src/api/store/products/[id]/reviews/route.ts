@@ -3,8 +3,8 @@ import {
   MedusaResponse,
 } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
-import { PRODUCT_REVIEW_MODULE } from "../../../../../modules/review"
-import ProductReviewModuleService from "../../../../../modules/review/service"
+import { PRODUCT_REVIEW_MODULE } from "../../../../../modules/product-review"
+import ProductReviewModuleService from "../../../../../modules/product-review/service"
 import { createFindParams } from "@medusajs/medusa/api/utils/validators"
 
 export const GetStoreReviewsSchema = createFindParams()
@@ -22,15 +22,15 @@ export const GET = async (
   const { data: reviews, metadata: {
     count,
     take,
-    skip,
+    skip
   } = { count: 0, take: 10, skip: 0 } } = await query.graph({
     entity: "review",
     filters: {
       product_id: id,
       // @ts-ignore
-      status: "approved",
+      status: "approved"
     },
-    ...req.queryConfig,
+    ...req.queryConfig
   })
 
   res.json({
@@ -38,6 +38,8 @@ export const GET = async (
     count,
     limit: take,
     offset: skip,
-    average_rating: await reviewModuleService.getAverageRating(id),
+    average_rating: await reviewModuleService.getAverageRating(id)
   })
 }
+
+

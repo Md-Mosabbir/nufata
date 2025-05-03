@@ -1,4 +1,4 @@
-import {
+import { 
   createWorkflow,
   WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
@@ -25,11 +25,11 @@ export const createReviewWorkflow = createWorkflow(
       entity: "product",
       fields: ["id"],
       filters: {
-        id: input.product_id,
+        id: input.product_id
       },
       options: {
-        throwIfKeyNotFound: true,
-      },
+        throwIfKeyNotFound: true
+      }
     })
 
     // Create the review
@@ -37,7 +37,8 @@ export const createReviewWorkflow = createWorkflow(
 
     // @ts-ignore
     return new WorkflowResponse({
-      review,
+      review
     })
   }
 )
+

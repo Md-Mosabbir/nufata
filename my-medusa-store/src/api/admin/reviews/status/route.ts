@@ -19,8 +19,8 @@ export async function POST(
   const { result } = await updateReviewWorkflow(req.scope).run({
     input: ids.map((id) => ({
       id,
-      status,
-    })),
+      status
+    }))
   })
 
   res.json(result)

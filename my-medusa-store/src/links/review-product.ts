@@ -1,5 +1,5 @@
 import { defineLink } from "@medusajs/framework/utils"
-import ProductReviewModule from "../modules/review"
+import ProductReviewModule from "../modules/product-review"
 import ProductModule from "@medusajs/medusa/product"
 
 export default defineLink(
@@ -10,6 +10,6 @@ export default defineLink(
   },
   ProductModule.linkable.product,
   {
-    readOnly: true,
+    readOnly: true
   }
 )

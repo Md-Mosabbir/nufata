@@ -15,7 +15,7 @@ export const updateReviewWorkflow = createWorkflow(
     const reviews = updateReviewsStep(input)
 
     return new WorkflowResponse({
-      reviews,
+      reviews
     })
   }
 )

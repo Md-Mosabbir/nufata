@@ -2,8 +2,8 @@ import {
   createStep,
   StepResponse,
 } from "@medusajs/framework/workflows-sdk"
-import { PRODUCT_REVIEW_MODULE } from "../../modules/review"
-import ProductReviewModuleService from "../../modules/review/service"
+import { PRODUCT_REVIEW_MODULE } from "../../modules/product-review"
+import ProductReviewModuleService from "../../modules/product-review/service"
 
 export type CreateReviewStepInput = {
   title?: string
@@ -39,3 +39,4 @@ export const createReviewStep = createStep(
     await reviewModuleService.deleteReviews(reviewId)
   }
 )
+
