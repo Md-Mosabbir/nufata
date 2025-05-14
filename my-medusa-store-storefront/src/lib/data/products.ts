@@ -193,3 +193,26 @@ export const addProductReview = async (input: {
     cache: "no-store",
   })
 }
+
+export const getProductIngredients = async ({
+  productId,
+}: {
+  productId: string
+}) => {
+  const headers = {
+    ...(await getAuthHeaders()),
+  }
+
+  const next = {
+    ...(await getCacheOptions(`product-ingredients-${productId}`)),
+  }
+
+  return sdk.client.fetch<{ ingredients: any[] }>(
+    `/store/products/${productId}/ingredients`,
+    {
+      headers,
+      next,
+      cache: "force-cache",
+    }
+  )
+}

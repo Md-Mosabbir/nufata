@@ -11,6 +11,7 @@ import { useParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
+import { getProductIngredients } from "@lib/data/products"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct
@@ -34,6 +35,13 @@ export default function ProductActions({
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
   const countryCode = useParams().countryCode as string
+  const [ingredients, setIngredients] = useState<
+    { id: string; name: string; grams: number; removable: boolean }[]
+  >([])
+  const [selectedIngredients, setSelectedIngredients] = useState<{
+    [id: string]: boolean
+  }>({})
+  const [loadingIngredients, setLoadingIngredients] = useState(false)
 
   // If there is only 1 variant, preselect the options
   useEffect(() => {
@@ -98,24 +106,80 @@ export default function ProductActions({
 
   const inView = useIntersection(actionsRef, "0px")
 
-  // add the selected variant to the cart
+  // Fetch ingredients for this product
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      setLoadingIngredients(true)
+      try {
+        const { ingredients } = await getProductIngredients({ productId: product.id })
+        setIngredients(ingredients)
+        // Default: all checked
+        const defaultSelected: { [id: string]: boolean } = {}
+        ingredients.forEach((ing: any) => {
+          defaultSelected[ing.id] = true
+        })
+        setSelectedIngredients(defaultSelected)
+      } catch (e) {
+        setIngredients([])
+      } finally {
+        setLoadingIngredients(false)
+      }
+    }
+    if (product.id) fetchIngredients()
+  }, [product.id])
+
+  // Add to cart with selected ingredients as metadata
   const handleAddToCart = async () => {
     if (!selectedVariant?.id) return null
-
     setIsAdding(true)
-
+    // Gather selected ingredients
+    const selected = ingredients.filter((ing) => selectedIngredients[ing.id])
+    const ingredientMeta = selected.map((ing) => ({ id: ing.id, name: ing.name }))
     await addToCart({
       variantId: selectedVariant.id,
       quantity: 1,
       countryCode,
+      metadata: {
+        ingredients: ingredientMeta,
+      },
     })
-
     setIsAdding(false)
   }
 
   return (
     <>
       <div className="flex flex-col gap-y-2" ref={actionsRef}>
+        {/* Ingredient selection UI */}
+        {loadingIngredients ? (
+          <div>Loading ingredients...</div>
+        ) : ingredients.length > 0 ? (
+          <div className="mb-4">
+            <div className="font-semibold mb-2">Ingredients</div>
+            <ul className="space-y-1">
+              {ingredients.map((ing) => (
+                <li key={ing.id} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={!!selectedIngredients[ing.id]}
+                    disabled={!ing.removable}
+                    onChange={() =>
+                      setSelectedIngredients((prev) => ({
+                        ...prev,
+                        [ing.id]: !prev[ing.id],
+                      }))
+                    }
+                  />
+                  <span>{ing.name}</span>
+                  <span className="text-xs text-gray-500">{ing.grams}g</span>
+                  {!ing.removable && (
+                    <span className="text-xs text-gray-400 ml-2">(Required)</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {/* End ingredient selection UI */}
         <div>
           {(product.variants?.length ?? 0) > 1 && (
             <div className="flex flex-col gap-y-4">
