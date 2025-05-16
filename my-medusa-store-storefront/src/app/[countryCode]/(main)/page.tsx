@@ -4,9 +4,10 @@ import HeroSection from "@modules/home/components/hero-section"
 import ProductHighlights from "@modules/home/components/product-highlights"
 import BenefitsGrid from "@modules/home/components/benefits-grid"
 import InfoSection from "@modules/home/components/info-section"
-import FeaturedProducts from "@modules/home/components/featured-products"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
+import Testimonials from "@modules/home/components/testimonials"
+import FeaturedProducts from "@modules/home/components/featured-products"
 
 export const metadata: Metadata = {
   title: "Medusa Next.js Starter Template",
@@ -35,12 +36,13 @@ export default async function Home(props: {
   return (
     <>
       <HeroSection />
-      <ProductHighlights />
-      <BenefitsGrid />
-      <InfoSection />
       <div className="py-12">
+        {/* <FeaturedProductsWrapper countryCode={countryCode} /> */}
         <FeaturedProducts countryCode={countryCode} />
       </div>
+      <BenefitsGrid />
+
+      <Testimonials />
     </>
   )
 }

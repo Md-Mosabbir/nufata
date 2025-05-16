@@ -1,113 +1,93 @@
 import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
-import { Text, clx } from "@medusajs/ui"
-
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import MedusaCTA from "@modules/layout/components/medusa-cta"
 
 export default async function Footer() {
-  const { collections } = await listCollections({
-    fields: "*products",
-  })
+  const { collections } = await listCollections({ fields: "*products" })
   const productCategories = await listCategories()
 
   return (
-    <footer className="border-t border-ui-border-base w-full">
-      <div className="content-container flex flex-col w-full">
-        <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between py-40">
-          <div>
-            <LocalizedClientLink
-              href="/"
-              className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
-            >
-              Nufatah's
-            </LocalizedClientLink>
+    <footer className="bg-[#000000] pt-16 pb-8 w-full">
+      <div className="content-container px-4 md:px-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          <div className="md:col-span-2">
+            <h3 className="text-3xl font-extrabold text-[#FFFFFF] tracking-wide uppercase">
+              NUFATA'S
+            </h3>
           </div>
-          <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3">
-            {productCategories && productCategories?.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Categories
-                </span>
-                <ul
-                  className="grid grid-cols-1 gap-2"
-                  data-testid="footer-categories"
-                >
-                  {productCategories?.slice(0, 6).map((c) => {
-                    if (c.parent_category) {
-                      return
-                    }
 
-                    const children =
-                      c.category_children?.map((child) => ({
-                        name: child.name,
-                        handle: child.handle,
-                        id: child.id,
-                      })) || null
-
-                    return (
-                      <li
-                        className="flex flex-col gap-2 text-ui-fg-subtle txt-small"
-                        key={c.id}
-                      >
-                        <LocalizedClientLink
-                          className={clx(
-                            "hover:text-ui-fg-base",
-                            children && "txt-small-plus"
-                          )}
-                          href={`/categories/${c.handle}`}
-                          data-testid="category-link"
-                        >
-                          {c.name}
-                        </LocalizedClientLink>
-                        {children && (
-                          <ul className="grid grid-cols-1 ml-3 gap-2">
-                            {children &&
-                              children.map((child) => (
-                                <li key={child.id}>
-                                  <LocalizedClientLink
-                                    className="hover:text-ui-fg-base"
-                                    href={`/categories/${child.handle}`}
-                                    data-testid="category-link"
-                                  >
-                                    {child.name}
-                                  </LocalizedClientLink>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            )}
-            {collections && collections.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Collections
-                </span>
-                <ul
-                  className={clx(
-                    "grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small",
-                    {
-                      "grid-cols-2": (collections?.length || 0) > 3,
-                    }
-                  )}
-                >
-                  {collections?.slice(0, 6).map((c) => (
-                    <li key={c.id}>
+          {productCategories?.length > 0 && (
+            <div>
+              <h4 className="font-bold text-[#FFFFFF] mb-4">Categories</h4>
+              <ul className="space-y-2">
+                {productCategories.slice(0, 6).map((category) => {
+                  if (category.parent_category) return null
+                  return (
+                    <li key={category.id}>
                       <LocalizedClientLink
-                        className="hover:text-ui-fg-base"
-                        href={`/collections/${c.handle}`}
+                        href={`/categories/${category.handle}`}
+                        className="text-[#9CA3AF] hover:text-[#F2CC8F] transition-colors"
                       >
-                        {c.title}
+                        {category.name}
                       </LocalizedClientLink>
                     </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+                  )
+                })}
+              </ul>
+            </div>
+          )}
+
+          {collections?.length > 0 && (
+            <div>
+              <h4 className="font-bold text-[#FFFFFF] mb-4">Collections</h4>
+              <ul className="space-y-2">
+                {collections.slice(0, 6).map((collection) => (
+                  <li key={collection.id}>
+                    <LocalizedClientLink
+                      href={`/collections/${collection.handle}`}
+                      className="text-[#9CA3AF] hover:text-[#F2CC8F] transition-colors"
+                    >
+                      {collection.title}
+                    </LocalizedClientLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div className="border-t border-[#1F2937] pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-[#6B7280] mb-4 md:mb-0 text-sm">
+            &copy; {new Date().getFullYear()} Nufata's. All rights reserved.
+          </p>
+          <div className="flex space-x-4">
+            <a
+              href="#"
+              className="text-[#9CA3AF] hover:text-[#F2CC8F] transition-colors"
+            >
+              <span className="sr-only">Facebook</span>
+              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M22 12a10 10 0 10-11.5 9.9v-7H8v-3h2.5V9.5a3.5 3.5 0 013.7-3.9c1 0 2 .1 2 .1v2.3h-1.3c-1.3 0-1.7.8-1.7 1.6V12H17l-.5 3h-2.5v7A10 10 0 0022 12z" />
+              </svg>
+            </a>
+            <a
+              href="#"
+              className="text-[#9CA3AF] hover:text-[#F2CC8F] transition-colors"
+            >
+              <span className="sr-only">Instagram</span>
+              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 2 .2 2.4.4.6.2 1.1.6 1.5 1.1.4.4.9.9 1.1 1.5.2.4.3 1.2.4 2.4.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 2-.4 2.4-.2.6-.6 1.1-1.1 1.5-.4.4-.9.9-1.5 1.1-.4.2-1.2.3-2.4.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-2-.2-2.4-.4-.6-.2-1.1-.6-1.5-1.1-.4-.4-.9-.9-1.1-1.5-.2-.4-.3-1.2-.4-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c.1-1.2.2-2 .4-2.4.2-.6.6-1.1 1.1-1.5.4-.4.9-.9 1.5-1.1.4-.2 1.2-.3 2.4-.4C8.4 2.2 8.8 2.2 12 2.2zm0 1.8c-3.1 0-3.5 0-4.8.1-1 .1-1.5.2-1.9.3-.5.1-.9.3-1.2.6-.3.3-.5.7-.6 1.2-.1.4-.2.9-.3 1.9-.1 1.3-.1 1.7-.1 4.8s0 3.5.1 4.8c.1 1 .2 1.5.3 1.9.1.5.3.9.6 1.2.3.3.7.5 1.2.6.4.1.9.2 1.9.3 1.3.1 1.7.1 4.8.1s3.5 0 4.8-.1c1-.1 1.5-.2 1.9-.3.5-.1.9-.3 1.2-.6.3-.3.5-.7.6-1.2.1-.4.2-.9.3-1.9.1-1.3.1-1.7.1-4.8s0-3.5-.1-4.8c-.1-1-.2-1.5-.3-1.9-.1-.5-.3-.9-.6-1.2-.3-.3-.7-.5-1.2-.6-.4-.1-.9-.2-1.9-.3-1.3-.1-1.7-.1-4.8-.1zm0 3.5a5.3 5.3 0 110 10.6 5.3 5.3 0 010-10.6zm0 8.7a3.4 3.4 0 100-6.8 3.4 3.4 0 000 6.8zm5.7-8.9a1.3 1.3 0 110-2.6 1.3 1.3 0 010 2.6z" />
+              </svg>
+            </a>
+            <a
+              href="#"
+              className="text-[#9CA3AF] hover:text-[#F2CC8F] transition-colors"
+            >
+              <span className="sr-only">Twitter</span>
+              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19.6 7.3c.01.2.01.4.01.6 0 6.4-4.9 13.8-13.8 13.8-2.7 0-5.2-.8-7.3-2.3.4.1.9.2 1.3.2 2.2 0 4.2-.7 5.8-2-2-.1-3.6-1.4-4.2-3.2.3.1.7.1 1.1.1.5 0 1-.1 1.5-.2-2.2-.5-3.7-2.4-3.7-4.6v-.1c.6.3 1.2.5 1.9.5-1.2-.8-2-2.1-2-3.7 0-.8.2-1.5.6-2.2 2.2 2.7 5.5 4.4 9.2 4.6-.1-.3-.1-.6-.1-.9 0-2.4 2-4.4 4.4-4.4 1.3 0 2.4.5 3.2 1.4 1-.2 1.9-.5 2.7-1-.3.9-.9 1.7-1.8 2.2 1-.1 1.8-.4 2.6-.7-.6 1-1.3 1.7-2.1 2.4z" />
+              </svg>
+            </a>
           </div>
         </div>
       </div>
