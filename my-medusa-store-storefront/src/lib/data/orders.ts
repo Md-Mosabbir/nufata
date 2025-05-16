@@ -110,3 +110,15 @@ export const declineTransferRequest = async (id: string, token: string) => {
     .then(({ order }) => ({ success: true, error: null, order }))
     .catch((err) => ({ success: false, error: err.message, order: null }))
 }
+
+export const cancelOrder = async (id: string) => {
+  const headers = await getAuthHeaders()
+
+  return await sdk.client
+    .fetch(`/store/orders/${id}/cancel`, {
+      method: "POST",
+      headers,
+    })
+    .then((res) => ({ success: true, error: null, res }))
+    .catch((err) => ({ success: false, error: err.message }))
+}

@@ -1,13 +1,19 @@
 import { getCollectionByHandle } from "@lib/data/collections"
 import PaginatedProducts from "@modules/store/templates/paginated-products"
 
-export default async function FeaturedProducts({ countryCode }: { countryCode: string }) {
+export default async function FeaturedProducts({
+  countryCode,
+}: {
+  countryCode: string
+}) {
   // Use the handle you set in Medusa admin, e.g., "featured"
   const collection = await getCollectionByHandle("featured")
 
   if (!collection || !collection.products?.length) {
     return null
   }
+
+  //  console.log("Collection data:", collection) works
 
   return (
     <section>
@@ -20,4 +26,4 @@ export default async function FeaturedProducts({ countryCode }: { countryCode: s
       />
     </section>
   )
-} 
+}

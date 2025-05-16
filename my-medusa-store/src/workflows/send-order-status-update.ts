@@ -7,11 +7,12 @@ import { sendNotificationStep } from "./steps/send-notification"
 
 type WorkflowInput = {
   id: string
+  status: string
 }
 
-export const sendOrderConfirmationWorkflow = createWorkflow(
-  "send-order-confirmation",
-  ({ id }: WorkflowInput) => {
+export const sendOrderStatusUpdateWorkflow = createWorkflow(
+  "send-order-status-update",
+  ({ id, status }: WorkflowInput) => {
     // @ts-ignore
     const { data: orders } = useQueryGraphStep({
       entity: "order",
@@ -21,20 +22,8 @@ export const sendOrderConfirmationWorkflow = createWorkflow(
         "email",
         "currency_code",
         "total",
-        "items.*",
-        "items.thumbnail",
-        "shipping_address.*",
-        "billing_address.*",
-        "shipping_methods.*",
         "customer.*",
-        "total",
-        "subtotal",
-        "discount_total",
-        "shipping_total",
-        "tax_total",
-        "item_subtotal",
-        "item_total",
-        "item_tax_total",
+        "shipping_address.*",
       ],
       filters: {
         id,
@@ -45,17 +34,19 @@ export const sendOrderConfirmationWorkflow = createWorkflow(
       {
         to: orders[0].email as string,
         channel: "email",
-        template: "order-placed",
+        template: "order-status-update",
         data: {
           order: orders[0],
+          status,
         },
       },
       {
         to: process.env.ADMIN_EMAIL || "admin@example.com",
         channel: "email",
-        template: "order-placed",
+        template: "order-status-update",
         data: {
           order: orders[0],
+          status,
           isAdmin: true,
         },
       }
@@ -65,4 +56,4 @@ export const sendOrderConfirmationWorkflow = createWorkflow(
 
     return new WorkflowResponse(notification)
   }
-)
+) 

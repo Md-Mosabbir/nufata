@@ -58,6 +58,13 @@ export default defineMiddlewares({
       middlewares: [
         validateAndTransformBody(PostAdminUpdateReviewsStatusSchema)
       ]
+    },
+    {
+      matcher: "/store/orders/:id/cancel",
+      method: ["POST"],
+      middlewares: [
+        authenticate("customer", ["session", "bearer"])
+      ]
     }
   ]
 })

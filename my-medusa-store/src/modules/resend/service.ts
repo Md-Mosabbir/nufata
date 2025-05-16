@@ -12,13 +12,16 @@ import {
   Resend
 } from "resend";
 import { orderPlacedEmail } from "./emails/order-placed";
+import { orderStatusUpdateEmail } from "./emails/order-status-update";
 
 enum Templates {
   ORDER_PLACED = "order-placed",
+  ORDER_STATUS_UPDATE = "order-status-update",
 }
 
 const templates: {[key in Templates]?: (props: unknown) => React.ReactNode} = {
-  [Templates.ORDER_PLACED]: orderPlacedEmail
+  [Templates.ORDER_PLACED]: orderPlacedEmail,
+  [Templates.ORDER_STATUS_UPDATE]: orderStatusUpdateEmail,
 }
 
 type ResendOptions = {
@@ -65,7 +68,6 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
     }
   }
 
-
   getTemplate(template: Templates) {
     if (this.options.html_templates?.[template]) {
       return this.options.html_templates[template].content
@@ -86,6 +88,8 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
     switch(template) {
       case Templates.ORDER_PLACED:
         return "Order Confirmation"
+      case Templates.ORDER_STATUS_UPDATE:
+        return "Order Status Update"
       default:
         return "New Email"
     }
