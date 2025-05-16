@@ -3,6 +3,7 @@ import Image from "next/image"
 import React from "react"
 
 import PlaceholderImage from "@modules/common/icons/placeholder-image"
+import { getSupabaseUrl } from "@lib/util/get-supabase-url"
 
 type ThumbnailProps = {
   thumbnail?: string | null
@@ -22,7 +23,9 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   className,
   "data-testid": dataTestid,
 }) => {
-  const initialImage = thumbnail || images?.[0]?.url
+  const initialImage =
+    getSupabaseUrl(thumbnail) || getSupabaseUrl(images?.[0]?.url) || undefined
+  console.log("thumbnail", initialImage)
 
   return (
     <Container

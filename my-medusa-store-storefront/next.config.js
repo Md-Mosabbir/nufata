@@ -37,6 +37,9 @@ const nextConfig = {
         hostname: "medusa-server-testing.s3.us-east-1.amazonaws.com",
       },
     ],
+    domains: [
+      "vmalvylbpzudqhkvpcqj.supabase.co",
+    ],
   },
 }
 

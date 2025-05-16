@@ -5,6 +5,7 @@ import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Thumbnail from "../thumbnail"
 import PreviewPrice from "./price"
+import { getSupabaseUrl } from "@lib/util/get-supabase-url"
 
 export default async function ProductPreview({
   product,
@@ -32,8 +33,8 @@ export default async function ProductPreview({
     <LocalizedClientLink href={`/products/${product.handle}`} className="group">
       <div data-testid="product-wrapper">
         <Thumbnail
-          thumbnail={product.thumbnail}
-          images={product.images}
+          thumbnail={getSupabaseUrl(product.thumbnail)}
+          images={product.images?.map(img => ({ ...img, url: getSupabaseUrl(img.url) }))}
           size="full"
           isFeatured={isFeatured}
         />

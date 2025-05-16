@@ -36,7 +36,7 @@ export default async function Home(props: {
   return (
     <>
       <HeroSection />
-      <div className="py-12">
+      <div className="">
         {/* <FeaturedProductsWrapper countryCode={countryCode} /> */}
         <FeaturedProducts countryCode={countryCode} />
       </div>
