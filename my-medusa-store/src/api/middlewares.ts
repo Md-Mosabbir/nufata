@@ -65,7 +65,22 @@ export default defineMiddlewares({
       middlewares: [
         authenticate("customer", ["session", "bearer"])
       ]
+    },
+    {
+      matcher: "/store/customers-reset-password",
+      method: ["POST"],
+      middlewares: [
+        validateAndTransformBody(z.object({ identifier: z.string().email() }))
+      ]
+    },
+    {
+      matcher: "/store/customers-reset-password-confirm",
+      method: ["POST"],
+      middlewares: [
+        validateAndTransformBody(z.object({ email: z.string().email(), password: z.string().min(8) }))
+      ]
     }
+    // Removed custom admin password reset endpoints. Use Medusa's built-in /auth/user/emailpass/reset-password and /auth/user/emailpass/reset-password-confirm endpoints for admin password reset.
   ]
 })
 
