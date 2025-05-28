@@ -3,7 +3,14 @@
 import { addToCart } from "@lib/data/cart"
 import { useIntersection } from "@lib/hooks/use-in-view"
 import { HttpTypes } from "@medusajs/types"
-import { Button } from "@medusajs/ui"
+import {
+  Badge,
+  Button,
+  Checkbox,
+  createDataTableColumnHelper,
+  DataTable,
+  useDataTable,
+} from "@medusajs/ui"
 import Divider from "@modules/common/components/divider"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
 import { isEqual } from "lodash"
@@ -28,6 +35,50 @@ const optionsAsKeymap = (
   }, {})
 }
 
+const columnHelper = createDataTableColumnHelper<{
+  id: string
+  name: string
+  grams: number
+  removable: boolean
+}>()
+
+const ingredientColumns = (selectedIngredients, setSelectedIngredients) => [
+  columnHelper.display({
+    id: "select",
+    header: "",
+    cell: ({ row }) => (
+      <Checkbox
+        checked={!!selectedIngredients[row.original.id]}
+        disabled={!row.original.removable}
+        onCheckedChange={() =>
+          setSelectedIngredients((prev) => ({
+            ...prev,
+            [row.original.id]: !prev[row.original.id],
+          }))
+        }
+      />
+    ),
+  }),
+  columnHelper.accessor("name", {
+    header: "Ingredient",
+    cell: ({ getValue }) => getValue(),
+  }),
+  columnHelper.accessor("grams", {
+    header: "Weight (g)",
+    cell: ({ getValue }) => `${getValue()}g`,
+  }),
+  // columnHelper.display({
+  //   id: "required",
+  //   header: "",
+  //   cell: ({ row }) =>
+  //     !row.original.removable ? (
+  //       <Badge color="grey" size="xsmall">
+  //         Required
+  //       </Badge>
+  //     ) : null,
+  // }),
+]
+
 export default function ProductActions({
   product,
   disabled,
@@ -42,6 +93,12 @@ export default function ProductActions({
     [id: string]: boolean
   }>({})
   const [loadingIngredients, setLoadingIngredients] = useState(false)
+
+  const ingredientTable = useDataTable({
+    columns: ingredientColumns(selectedIngredients, setSelectedIngredients),
+    data: ingredients,
+    getRowId: (row) => row.id,
+  })
 
   // If there is only 1 variant, preselect the options
   useEffect(() => {
@@ -111,7 +168,9 @@ export default function ProductActions({
     const fetchIngredients = async () => {
       setLoadingIngredients(true)
       try {
-        const { ingredients } = await getProductIngredients({ productId: product.id })
+        const { ingredients } = await getProductIngredients({
+          productId: product.id,
+        })
         setIngredients(ingredients)
         // Default: all checked
         const defaultSelected: { [id: string]: boolean } = {}
@@ -134,7 +193,10 @@ export default function ProductActions({
     setIsAdding(true)
     // Gather selected ingredients
     const selected = ingredients.filter((ing) => selectedIngredients[ing.id])
-    const ingredientMeta = selected.map((ing) => ({ id: ing.id, name: ing.name }))
+    const ingredientMeta = selected.map((ing) => ({
+      id: ing.id,
+      name: ing.name,
+    }))
     await addToCart({
       variantId: selectedVariant.id,
       quantity: 1,
@@ -153,30 +215,13 @@ export default function ProductActions({
         {loadingIngredients ? (
           <div>Loading ingredients...</div>
         ) : ingredients.length > 0 ? (
-          <div className="mb-4">
-            <div className="font-semibold mb-2">Ingredients</div>
-            <ul className="space-y-1">
-              {ingredients.map((ing) => (
-                <li key={ing.id} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={!!selectedIngredients[ing.id]}
-                    disabled={!ing.removable}
-                    onChange={() =>
-                      setSelectedIngredients((prev) => ({
-                        ...prev,
-                        [ing.id]: !prev[ing.id],
-                      }))
-                    }
-                  />
-                  <span>{ing.name}</span>
-                  <span className="text-xs text-gray-500">{ing.grams}g</span>
-                  {!ing.removable && (
-                    <span className="text-xs text-gray-400 ml-2">(Required)</span>
-                  )}
-                </li>
-              ))}
-            </ul>
+          <div className="mb-6">
+            <div className="font-semibold mb-3 text-lg">Ingredients</div>
+            <div className="overflow-x-auto border border-gray-200 rounded-lg">
+              <DataTable instance={ingredientTable}>
+                <DataTable.Table />
+              </DataTable>
+            </div>
           </div>
         ) : null}
         {/* End ingredient selection UI */}

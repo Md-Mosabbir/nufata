@@ -29,12 +29,17 @@ export default async function ProductPreview({
     product,
   })
 
+  console.log("product", product)
+
   return (
     <LocalizedClientLink href={`/products/${product.handle}`} className="group">
       <div data-testid="product-wrapper">
         <Thumbnail
           thumbnail={getSupabaseUrl(product.thumbnail)}
-          images={product.images?.map(img => ({ ...img, url: getSupabaseUrl(img.url) }))}
+          images={product.images?.map((img) => ({
+            ...img,
+            url: getSupabaseUrl(img.url),
+          }))}
           size="full"
           isFeatured={isFeatured}
         />

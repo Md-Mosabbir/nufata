@@ -2,6 +2,7 @@
 
 import { Button } from "@medusajs/ui"
 import { motion } from "framer-motion"
+import Image from "next/image"
 
 /**
  * Colors used:
@@ -20,14 +21,17 @@ import { motion } from "framer-motion"
 export default function HeroSection() {
   return (
     <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Background with gradient overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center z-0"
-        style={{
-          backgroundImage: "url('/placeholder.svg?height=1080&width=1920')",
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#E07A5F]/30 via-[#E07A5F]/20 to-[#81B29A]/30"></div>{" "}
+      {/* Responsive background image with gradient overlay */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <Image
+          src="/hero-bg.png" // Replace with your image path
+          alt="Hero background"
+          fill
+          style={{ objectFit: "cover" }}
+          priority
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#E07A5F]/30 via-[#E07A5F]/20 to-[#81B29A]/30"></div>
         {/* from: Warm terracotta, to: Muted sage green */}
       </div>
 
