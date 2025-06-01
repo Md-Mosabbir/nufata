@@ -6,8 +6,6 @@ import { sendOrderStatusUpdateWorkflow } from "../workflows/send-order-status-up
 
 const getStatusFromEvent = (eventName: string): string => {
   switch (eventName) {
-    case "order.updated":
-      return "updated"
     case "order.placed":
       return "placed"
     case "order.canceled":
@@ -42,7 +40,6 @@ export default async function orderStatusUpdateHandler({
 
 export const config: SubscriberConfig = {
   event: [
-    "order.updated",
     "order.placed",
     "order.canceled",
     "order.completed",

@@ -17,10 +17,10 @@ export default async function resetPasswordTokenHandler({
   )
 
   const urlPrefix = actor_type === "customer"
-    ? "https://storefront.com/"
+    ? "http://localhost:8000/"
     : actor_type === "user"
       ? "http://localhost:9000/app/"
-      : "https://storefront.com/"
+      : "http://localhost:8000/"
 
   await notificationModuleService.createNotifications({
     to: email,

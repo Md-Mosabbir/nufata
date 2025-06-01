@@ -14,17 +14,23 @@ import {
 import { orderPlacedEmail } from "./emails/order-placed";
 import { orderStatusUpdateEmail } from "./emails/order-status-update";
 import { resetPasswordEmail } from "./emails/reset-password";
+import { shipmentCreatedEmail } from "./emails/shipment-created";
+import { deliveryCreatedEmail } from "./emails/delivery-created";
 
 enum Templates {
   ORDER_PLACED = "order-placed",
   ORDER_STATUS_UPDATE = "order-status-update",
   RESET_PASSWORD = "reset-password",
+  SHIPMENT_CREATED = "shipment-created",
+  DELIVERY_CREATED = "delivery-created",
 }
 
 const templates: {[key in Templates]?: (props: unknown) => React.ReactNode} = {
   [Templates.ORDER_PLACED]: orderPlacedEmail,
   [Templates.ORDER_STATUS_UPDATE]: orderStatusUpdateEmail,
   [Templates.RESET_PASSWORD]: resetPasswordEmail,
+  [Templates.SHIPMENT_CREATED]: shipmentCreatedEmail,
+  [Templates.DELIVERY_CREATED]: deliveryCreatedEmail,
 }
 
 type ResendOptions = {
@@ -95,6 +101,10 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
         return "Order Status Update"
       case Templates.RESET_PASSWORD:
         return "Reset Password"
+      case Templates.SHIPMENT_CREATED:
+        return "Your Order Has Been Shipped"
+      case Templates.DELIVERY_CREATED:
+        return "Your Order Has Been Delivered"
       default:
         return "New Email"
     }
