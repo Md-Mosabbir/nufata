@@ -71,11 +71,13 @@ export default function HeroSection() {
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.98 }}
           >
-            <Button className="bg-[#F2CC8F] hover:bg-[#EDB85F] text-[#000000] font-medium px-8 py-6 rounded-full text-lg shadow-md transition-all duration-300">
-              {" "}
-              {/* bg: Vibrant ochre, hover: Medium-dark ochre, text: Black */}
-              Explore the Collection
-            </Button>
+            <a href="/store">
+              <Button className="bg-[#F1CC8F] hover:bg-[#EDB85F] text-[#000000] font-medium px-8 py-6 rounded-full text-lg shadow-md transition-all duration-300">
+                {" "}
+                {/* bg: Vibrant ochre, hover: Medium-dark ochre, text: Black */}
+                Explore the Collection
+              </Button>
+            </a>
           </motion.div>
         </motion.div>
       </div>

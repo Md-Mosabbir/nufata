@@ -68,8 +68,11 @@ export const listProducts = async ({
           ...queryParams,
         },
         headers,
-        next,
-        cache: "no-store",
+        next: {
+          ...next,
+          revalidate: 600, // Revalidate every 10 minutes
+          tags: ['products'] // For manual revalidation when needed
+        }
       }
     )
     .then(({ products, count }) => {
@@ -166,8 +169,11 @@ export const getProductReviews = async ({
       offset,
       order: "-created_at",
     },
-    next,
-    cache: "force-cache",
+    next: {
+      ...next,
+      revalidate: 300, // Revalidate every 5 minutes
+      tags: [`product-reviews-${productId}`]
+    }
   })
 }
 
@@ -211,8 +217,11 @@ export const getProductIngredients = async ({
     `/store/products/${productId}/ingredients`,
     {
       headers,
-      next,
-      cache: "force-cache",
+      next: {
+        ...next,
+        revalidate: 3600, // Revalidate every hour
+        tags: [`product-ingredients-${productId}`]
+      },
     }
   )
 }

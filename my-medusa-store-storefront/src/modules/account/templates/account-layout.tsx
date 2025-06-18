@@ -25,14 +25,17 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
           <div>
             <h3 className="text-xl-semi mb-4">Got questions?</h3>
             <span className="txt-medium">
-              You can find frequently asked questions and answers on our
-              customer service page.
+              Click this link to go to our Messenger Page
             </span>
           </div>
           <div>
-            <UnderlineLink href="/customer-service">
+            <a
+              target="_blank"
+              href="https://www.facebook.com/profile.php?id=61572638554973"
+              className="underline text-blue-600 hover:text-blue-800"
+            >
               Customer Service
-            </UnderlineLink>
+            </a>
           </div>
         </div>
       </div>
