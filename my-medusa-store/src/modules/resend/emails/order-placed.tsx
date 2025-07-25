@@ -1,17 +1,17 @@
-import { 
-  Text, 
-  Column, 
-  Container, 
-  Heading, 
-  Html, 
-  Img, 
-  Row, 
-  Section, 
-  Tailwind, 
-  Head, 
-  Preview, 
-  Body, 
-  Link 
+import {
+  Text,
+  Column,
+  Container,
+  Heading,
+  Html,
+  Img,
+  Row,
+  Section,
+  Tailwind,
+  Head,
+  Preview,
+  Body,
+  Link
 } from "@react-email/components"
 import { BigNumberValue, CustomerDTO, OrderDTO } from "@medusajs/framework/types"
 
@@ -37,64 +37,57 @@ function OrderPlacedEmailComponent({ order, email_banner, isAdmin }: OrderPlaced
   })
 
   const formatPrice = (price: BigNumberValue) => {
-    if (typeof price === "number") {
-      return formatter.format(price)
-    }
-
-    if (typeof price === "string") {
-      return formatter.format(parseFloat(price))
-    }
-
+    if (typeof price === "number") return formatter.format(price)
+    if (typeof price === "string") return formatter.format(parseFloat(price))
     return price?.toString() || ""
   }
 
   return (
     <Tailwind>
-      <Html className="font-sans bg-gray-100">
+      <Html className="font-sans bg-[#fdf6ec]">
         <Head />
         <Preview>
-          {isAdmin 
-            ? `New Order #${order.display_id} Received` 
-            : "Thank you for your order from Medusa"}
+          {isAdmin
+            ? `New Order #${order.display_id} Received`
+            : "Thank you for your order from NUFATA'S"}
         </Preview>
-        <Body className="bg-white my-10 mx-auto w-full max-w-2xl">
+        <Body className="bg-white my-10 mx-auto w-full max-w-2xl rounded shadow-lg border border-[#facc15]">
           {/* Header */}
-          <Section className="bg-[#27272a] text-white px-6 py-4">
-            <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.2447 3.92183L12.1688 1.57686C10.8352 0.807712 9.20112 0.807712 7.86753 1.57686L3.77285 3.92183C2.45804 4.69098 1.63159 6.11673 1.63159 7.63627V12.345C1.63159 13.8833 2.45804 15.2903 3.77285 16.0594L7.84875 18.4231C9.18234 19.1923 10.8165 19.1923 12.15 18.4231L16.2259 16.0594C17.5595 15.2903 18.3672 13.8833 18.3672 12.345V7.63627C18.4048 6.11673 17.5783 4.69098 16.2447 3.92183ZM10.0088 14.1834C7.69849 14.1834 5.82019 12.3075 5.82019 10C5.82019 7.69255 7.69849 5.81657 10.0088 5.81657C12.3191 5.81657 14.2162 7.69255 14.2162 10C14.2162 12.3075 12.3379 14.1834 10.0088 14.1834Z" fill="currentColor"></path></svg>
+          <Section className="bg-[#b91c1c] text-white px-6 py-4">
+            <Heading className="text-xl font-bold tracking-wide">
+              NUFATA'S
+            </Heading>
           </Section>
 
           {/* Message */}
           <Container className="p-6">
-            <Heading className="text-2xl font-bold text-center text-gray-800">
-              {isAdmin 
+            <Heading className="text-2xl font-bold text-center text-[#b91c1c]">
+              {isAdmin
                 ? `New Order #${order.display_id} Received`
                 : `Thank you for your order, ${order.customer?.first_name || order.shipping_address?.first_name}`}
             </Heading>
-            <Text className="text-center text-gray-600 mt-2">
+            <Text className="text-center text-gray-700 mt-2">
               {isAdmin
                 ? `A new order has been placed by ${order.customer?.first_name || order.shipping_address?.first_name}`
-                : "We're processing your order and will notify you when it ships."}
+                : "We're processing your order and will notify you when it's ready to enjoy!"}
             </Text>
           </Container>
 
-          {/* Promotional Banner - Only show for customers */}
+          {/* Promotional Banner - Customers only */}
           {!isAdmin && shouldDisplayBanner && (
-            <Container
-              className="mb-4 rounded-lg p-7"
-              style={{
-                background: 'linear-gradient(to right, #3b82f6, #4f46e5)'
-              }}
-            >
+            <Container className="mb-4 rounded-lg p-7" style={{
+              background: 'linear-gradient(to right, #facc15, #f59e0b)'
+            }}>
               <Section>
                 <Row>
                   <Column align="left">
-                    <Heading className="text-white text-xl font-semibold">
+                    <Heading className="text-[#78350f] text-xl font-semibold">
                       {email_banner.title}
                     </Heading>
-                    <Text className="text-white mt-2">{email_banner.body}</Text>
+                    <Text className="text-[#78350f] mt-2">{email_banner.body}</Text>
                   </Column>
                   <Column align="right">
-                    <Link href={email_banner.url} className="font-semibold px-2 text-white underline">
+                    <Link href={email_banner.url} className="font-semibold px-2 text-white bg-[#b91c1c] py-1 rounded">
                       Shop Now
                     </Link>
                   </Column>
@@ -105,7 +98,7 @@ function OrderPlacedEmailComponent({ order, email_banner, isAdmin }: OrderPlaced
 
           {/* Order Items */}
           <Container className="px-6">
-            <Heading className="text-xl font-semibold text-gray-800 mb-4">
+            <Heading className="text-xl font-semibold text-[#15803d] mb-4">
               {isAdmin ? "Order Details" : "Your Items"}
             </Heading>
             <Row>
@@ -147,9 +140,7 @@ function OrderPlacedEmailComponent({ order, email_banner, isAdmin }: OrderPlaced
                   <Text className="m-0">Subtotal</Text>
                 </Column>
                 <Column className="w-1/2 text-right">
-                  <Text className="m-0">
-                    {formatPrice(order.item_total)}
-                  </Text>
+                  <Text className="m-0">{formatPrice(order.item_total)}</Text>
                 </Column>
               </Row>
               {order.shipping_methods?.map((method) => (
@@ -180,64 +171,48 @@ function OrderPlacedEmailComponent({ order, email_banner, isAdmin }: OrderPlaced
               </Row>
             </Section>
 
-            {/* Customer Information - Only show for admin */}
+            {/* Customer Information (admin only) */}
             {isAdmin && (
               <Section className="mt-8">
                 <Heading className="text-xl font-semibold text-gray-800 mb-4">
                   Customer Information
                 </Heading>
                 <Row className="text-gray-600">
-                  <Column className="w-1/2">
-                    <Text className="m-0">Name</Text>
-                  </Column>
-                  <Column className="w-1/2 text-right">
-                    <Text className="m-0">
-                      {order.customer?.first_name} {order.customer?.last_name}
-                    </Text>
-                  </Column>
+                  <Column className="w-1/2"><Text className="m-0">Name</Text></Column>
+                  <Column className="w-1/2 text-right"><Text className="m-0">{order.customer?.first_name} {order.customer?.last_name}</Text></Column>
                 </Row>
                 <Row className="text-gray-600">
-                  <Column className="w-1/2">
-                    <Text className="m-0">Email</Text>
-                  </Column>
-                  <Column className="w-1/2 text-right">
-                    <Text className="m-0">{order.email}</Text>
-                  </Column>
+                  <Column className="w-1/2"><Text className="m-0">Email</Text></Column>
+                  <Column className="w-1/2 text-right"><Text className="m-0">{order.email}</Text></Column>
                 </Row>
                 <Row className="text-gray-600">
-                  <Column className="w-1/2">
-                    <Text className="m-0">Phone</Text>
-                  </Column>
-                  <Column className="w-1/2 text-right">
-                    <Text className="m-0">{order.shipping_address?.phone}</Text>
-                  </Column>
+                  <Column className="w-1/2"><Text className="m-0">Phone</Text></Column>
+                  <Column className="w-1/2 text-right"><Text className="m-0">{order.shipping_address?.phone}</Text></Column>
                 </Row>
               </Section>
             )}
           </Container>
 
           {/* Footer */}
-          <Section className="bg-gray-50 p-6 mt-10">
-            <Text className="text-center text-gray-500 text-sm">
+          <Section className="bg-[#fef3c7] p-6 mt-10 rounded-b">
+            <Text className="text-center text-[#92400e] text-sm">
               {isAdmin
-                ? "This is an automated notification for a new order. Please process it accordingly."
-                : "If you have any questions, reply to this email or contact our support team at support@medusajs.com."}
+                ? "New order alert from NUFATA'S. Please prepare for delivery."
+                : "Questions? Message us directly on our Facebook page — we’d love to help!"}
             </Text>
-            <Text className="text-center text-gray-500 text-sm">
+            <Text className="text-center text-[#a16207] text-sm">
               Order Token: {order.id}
             </Text>
-            <Text className="text-center text-gray-400 text-xs mt-4">
-              © {new Date().getFullYear()} Medusajs, Inc. All rights reserved.
+            <Text className="text-center text-[#a3a3a3] text-xs mt-4">
+              © {new Date().getFullYear()} NUFATA'S — Homemade Pithas & Desserts from the heart of Bangladesh.
             </Text>
           </Section>
         </Body>
       </Html>
-    </Tailwind >
+    </Tailwind>
   )
 }
 
 export const orderPlacedEmail = (props: OrderPlacedEmailProps) => (
   <OrderPlacedEmailComponent {...props} />
 )
-
-
