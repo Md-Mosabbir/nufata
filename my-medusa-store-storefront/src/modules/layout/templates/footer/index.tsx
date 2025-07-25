@@ -12,7 +12,7 @@ export default async function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div className="md:col-span-2">
             <h3 className="text-3xl font-extrabold text-[#FFFFFF] tracking-wide uppercase">
-              NUFATA'S
+              NUFATAH'S
             </h3>
           </div>
 
@@ -58,7 +58,7 @@ export default async function Footer() {
 
         <div className="border-t border-[#1F2937] pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-[#6B7280] mb-4 md:mb-0 text-sm">
-            &copy; {new Date().getFullYear()} Nufata's. All rights reserved.
+            &copy; {new Date().getFullYear()} Nufatah's. All rights reserved.
           </p>
           <div className="flex space-x-4">
             <a

@@ -4,14 +4,13 @@ import { INGREDIENT_MODULE } from "../../../../../modules/ingredient"
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   const { product_id } = req.params
-  const { name, grams, removable } = req.body as { name: string; grams: number; removable: boolean }
+  const { name, removable } = req.body as { name: string; removable: boolean }
 
   // Optionally validate input here
 
   const ingredientModuleService: IngredientModuleService = req.scope.resolve(INGREDIENT_MODULE)
   const ingredient = await ingredientModuleService.createIngredient({
     name,
-    grams,
     removable,
     product_id,
   })

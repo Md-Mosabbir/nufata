@@ -8,7 +8,7 @@ import FeaturedProducts from "@modules/home/components/featured-products"
 import QuickFacts from "@modules/home/components/facts"
 
 export const metadata: Metadata = {
-  title: "Nufata's",
+  title: "Nufatah's",
   description: "Best Home-made Pitha ",
 }
 

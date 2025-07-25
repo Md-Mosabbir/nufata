@@ -9,20 +9,19 @@ class IngredientModuleService extends MedusaService({
 }) {
   @InjectManager()
   async createIngredient(
-    data: { name: string; grams: number; removable: boolean; product_id: string },
+    data: { name: string; removable: boolean; product_id: string },
     @MedusaContext() sharedContext?: Context<EntityManager>
   ) {
     if (!sharedContext?.manager) {
       throw new Error("EntityManager is not available in context")
     }
     const result = await sharedContext.manager.execute(
-      `INSERT INTO ingredient (id, name, grams, removable, product_id, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, now(), now())
+      `INSERT INTO ingredient (id, name, removable, product_id, created_at, updated_at)
+       VALUES (?, ?, ?, ?, now(), now())
        RETURNING *`,
       [
         randomUUID(),
         data.name,
-        data.grams,
         data.removable,
         data.product_id
       ]
@@ -48,7 +47,7 @@ class IngredientModuleService extends MedusaService({
   @InjectManager()
   async updateIngredient(
     id: string,
-    data: { name?: string; grams?: number; removable?: boolean },
+    data: { name?: string; removable?: boolean },
     @MedusaContext() sharedContext?: Context<EntityManager>
   ) {
     if (!sharedContext?.manager) {
@@ -60,10 +59,6 @@ class IngredientModuleService extends MedusaService({
     if (data.name !== undefined) {
       fields.push("name = ?")
       values.push(data.name)
-    }
-    if (data.grams !== undefined) {
-      fields.push("grams = ?")
-      values.push(data.grams)
     }
     if (data.removable !== undefined) {
       fields.push("removable = ?")

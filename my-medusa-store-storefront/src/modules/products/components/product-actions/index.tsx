@@ -38,7 +38,6 @@ const optionsAsKeymap = (
 const columnHelper = createDataTableColumnHelper<{
   id: string
   name: string
-  grams: number
   removable: boolean
 }>()
 
@@ -63,10 +62,10 @@ const ingredientColumns = (selectedIngredients, setSelectedIngredients) => [
     header: "Ingredient",
     cell: ({ getValue }) => getValue(),
   }),
-  columnHelper.accessor("grams", {
-    header: "Weight (g)",
-    cell: ({ getValue }) => `${getValue()}g`,
-  }),
+  // columnHelper.accessor("grams", {
+  //   header: "Weight (g)",
+  //   cell: ({ getValue }) => `${getValue()}g`,
+  // }),
   // columnHelper.display({
   //   id: "required",
   //   header: "",
@@ -87,7 +86,7 @@ export default function ProductActions({
   const [isAdding, setIsAdding] = useState(false)
   const countryCode = useParams().countryCode as string
   const [ingredients, setIngredients] = useState<
-    { id: string; name: string; grams: number; removable: boolean }[]
+    { id: string; name: string; removable: boolean }[]
   >([])
   const [selectedIngredients, setSelectedIngredients] = useState<{
     [id: string]: boolean

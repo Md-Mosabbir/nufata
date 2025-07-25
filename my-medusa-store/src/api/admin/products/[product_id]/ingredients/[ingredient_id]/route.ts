@@ -4,13 +4,12 @@ import { INGREDIENT_MODULE } from "../../../../../../modules/ingredient"
 
 export async function PATCH(req: MedusaRequest, res: MedusaResponse) {
   const { ingredient_id } = req.params
-  const { name, grams, removable } = req.body as {
+  const { name, removable } = req.body as {
     name?: string
-    grams?: number
     removable?: boolean
   }
   const ingredientModuleService: IngredientModuleService = req.scope.resolve(INGREDIENT_MODULE)
-  const updated = await ingredientModuleService.updateIngredient(ingredient_id, { name, grams, removable })
+  const updated = await ingredientModuleService.updateIngredient(ingredient_id, { name, removable })
   res.status(200).json({ ingredient: updated })
 }
 

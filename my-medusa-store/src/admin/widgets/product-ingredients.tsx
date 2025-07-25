@@ -9,11 +9,11 @@ const ProductIngredientsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => 
   const productId = data.id
   const queryClient = useQueryClient()
   const [editIngredient, setEditIngredient] = useState<any | null>(null)
-  const [editForm, setEditForm] = useState({ name: "", grams: "", removable: false })
+  const [editForm, setEditForm] = useState({ name: "", removable: false })
   const [showEditModal, setShowEditModal] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [showCreateModal, setShowCreateModal] = useState(false)
-  const [createForm, setCreateForm] = useState({ name: "", grams: "", removable: false })
+  const [createForm, setCreateForm] = useState({ name: "", removable: false })
 
   const {
     data: ingredientsData = [],
@@ -47,10 +47,10 @@ const ProductIngredientsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => 
   })
 
   const patchMutation = useMutation({
-    mutationFn: async ({ id, name, grams, removable }: any) => {
+    mutationFn: async ({ id, name, removable }: any) => {
       await sdk.client.fetch(`/admin/products/${productId}/ingredients/${id}`, {
         method: "PATCH",
-        body: { name, grams: Number(grams), removable },
+        body: { name, removable },
       })
     },
     onSuccess: () => {
@@ -64,16 +64,16 @@ const ProductIngredientsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => 
   })
 
   const createMutation = useMutation({
-    mutationFn: async ({ name, grams, removable }: any) => {
+    mutationFn: async ({ name, removable }: any) => {
       await sdk.client.fetch(`/admin/products/${productId}/ingredients`, {
         method: "POST",
-        body: { name, grams: Number(grams), removable },
+        body: { name, removable },
       })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ingredients", productId] })
       setShowCreateModal(false)
-      setCreateForm({ name: "", grams: "", removable: false })
+      setCreateForm({ name: "", removable: false })
     },
     onError: (err: any) => {
       alert(err?.message || "Failed to create ingredient")
@@ -84,7 +84,6 @@ const ProductIngredientsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => 
     setEditIngredient(ingredient)
     setEditForm({
       name: ingredient.name,
-      grams: ingredient.grams.toString(),
       removable: ingredient.removable,
     })
     setShowEditModal(true)
@@ -122,7 +121,6 @@ const ProductIngredientsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => 
           <thead>
             <tr className="border-b border-ui-border-base">
               <th className="text-left py-2 px-2 text-xs font-semibold tracking-wider text-ui-fg-muted uppercase">Name</th>
-              <th className="text-left py-2 px-2 text-xs font-semibold tracking-wider text-ui-fg-muted uppercase">Grams</th>
               <th className="text-left py-2 px-2 text-xs font-semibold tracking-wider text-ui-fg-muted uppercase">Removable</th>
               <th className="text-left py-2 px-2 text-xs font-semibold tracking-wider text-ui-fg-muted uppercase">Actions</th>
             </tr>
@@ -131,7 +129,6 @@ const ProductIngredientsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => 
             {ingredientsData.map((ingredient: any, idx: number) => (
               <tr key={ingredient.id} className={idx % 2 === 0 ? "bg-ui-bg-base" : "bg-transparent"}>
                 <td className="py-2 px-2 align-middle">{ingredient.name}</td>
-                <td className="py-2 px-2 align-middle">{ingredient.grams}g</td>
                 <td className="py-2 px-2 align-middle">
                   {ingredient.removable ? (
                     <span className="inline-block rounded px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">Yes</span>
@@ -177,17 +174,6 @@ const ProductIngredientsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => 
                   className="mt-1"
                 />
               </label>
-              <label className="text-xs font-semibold text-ui-fg-muted uppercase">
-                Grams
-                <Input
-                  type="number"
-                  value={editForm.grams}
-                  onChange={e => setEditForm(f => ({ ...f, grams: e.target.value }))}
-                  required
-                  min={0}
-                  className="mt-1"
-                />
-              </label>
               <label className="flex items-center gap-2 text-xs font-semibold text-ui-fg-muted uppercase">
                 <input
                   type="checkbox"
@@ -220,17 +206,6 @@ const ProductIngredientsWidget = ({ data }: DetailWidgetProps<AdminProduct>) => 
                   value={createForm.name}
                   onChange={e => setCreateForm(f => ({ ...f, name: e.target.value }))}
                   required
-                  className="mt-1"
-                />
-              </label>
-              <label className="text-xs font-semibold text-ui-fg-muted uppercase">
-                Grams
-                <Input
-                  type="number"
-                  value={createForm.grams}
-                  onChange={e => setCreateForm(f => ({ ...f, grams: e.target.value }))}
-                  required
-                  min={0}
                   className="mt-1"
                 />
               </label>

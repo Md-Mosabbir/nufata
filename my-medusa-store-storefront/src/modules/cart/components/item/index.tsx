@@ -71,19 +71,17 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
         </Text>
         <LineItemOptions variant={item.variant} data-testid="product-variant" />
         {/* Show selected ingredients if present in metadata */}
-        {Array.isArray(item.metadata?.ingredients) && item.metadata.ingredients.length > 0 && (
-          <div className="mt-1 text-xs text-gray-700">
-            <span className="font-semibold">Ingredients:</span>
-            <ul className="ml-2 list-disc">
-              {item.metadata.ingredients.map((ing: any) => (
-                <li key={ing.id}>
-                  {ing.name}
-                  {ing.grams ? ` (${ing.grams}g)` : null}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {Array.isArray(item.metadata?.ingredients) &&
+          item.metadata.ingredients.length > 0 && (
+            <div className="mt-1 text-xs text-gray-700">
+              <span className="font-semibold">Ingredients:</span>
+              <ul className="ml-2 list-disc">
+                {item.metadata.ingredients.map((ing: any) => (
+                  <li key={ing.id}>{ing.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
       </Table.Cell>
 
       {type === "full" && (

@@ -22,7 +22,6 @@ const OrderIngredientsWidget = ({ data }: DetailWidgetProps<AdminOrder>) => (
                   {item.metadata.ingredients.map((ing: any) => (
                     <li key={ing.id}>
                       {ing.name}
-                      {ing.grams ? ` (${ing.grams}g)` : ""}
                     </li>
                   ))}
                 </ul>

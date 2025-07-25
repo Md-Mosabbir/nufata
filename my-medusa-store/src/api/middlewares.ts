@@ -11,16 +11,19 @@ import { GetAdminReviewsSchema } from "./admin/reviews/route"
 import { PostAdminUpdateReviewsStatusSchema } from "./admin/reviews/status/route"
 import { GetStoreReviewsSchema } from "./store/products/[id]/reviews/route"
 
+
+
+
 export default defineMiddlewares({
   routes: [
     {
       matcher: "/store/reviews",
-      method: ["POST"], 
+      method: ["POST"],
       middlewares: [
         authenticate("customer", ["session", "bearer"]),
         validateAndTransformBody(PostStoreReviewSchema)
       ]
-    }, 
+    },
     {
       matcher: "/store/products/:id/reviews",
       method: ["GET"],
@@ -79,6 +82,39 @@ export default defineMiddlewares({
       middlewares: [
         validateAndTransformBody(z.object({ email: z.string().email(), password: z.string().min(8) }))
       ]
+    },
+    {
+      matcher: "/admin/products/:product_id/ingredients",
+      method: ["POST"],
+      middlewares: [
+        authenticate("user", ["session", "bearer"]),
+      ]
+    },
+    {
+      matcher: "/admin/products/:product_id/ingredients",
+      method: ["GET"],
+      middlewares: [
+        authenticate("user", ["session", "bearer"])
+      ]
+    },
+    {
+      matcher: "/admin/products/:product_id/ingredients/:ingredient_id",
+      method: ["PATCH"],
+      middlewares: [
+        authenticate("user", ["session", "bearer"]),
+      ]
+    },
+    {
+      matcher: "/admin/products/:product_id/ingredients/:ingredient_id",
+      method: ["DELETE"],
+      middlewares: [
+        authenticate("user", ["session", "bearer"])
+      ]
+    },
+    {
+      matcher: "/store/products/:product_id/ingredients",
+      method: ["GET"],
+      middlewares: []
     }
     // Removed custom admin password reset endpoints. Use Medusa's built-in /auth/user/emailpass/reset-password and /auth/user/emailpass/reset-password-confirm endpoints for admin password reset.
   ]
