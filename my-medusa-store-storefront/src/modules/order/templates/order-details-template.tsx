@@ -57,7 +57,7 @@ const OrderDetailsTemplate: React.FC<OrderDetailsTemplateProps> = ({
         <Items order={order} />
         <ShippingDetails order={order} />
         <OrderSummary order={order} />
-        {order.status === "pending" && !success && (
+        {order.status === "pending" && order.fulfillment_status !== "delivered" && !success && (
           <button
             className="bg-red-600 text-white px-4 py-2 rounded disabled:opacity-50"
             onClick={handleCancel}
