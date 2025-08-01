@@ -33,26 +33,29 @@ export default function RequestResetPassword() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow"
-    >
-      <h1 className="text-2xl font-bold mb-4">Request Password Reset</h1>
-      <label className="block mb-2">Email</label>
-      <input
-        className="w-full p-2 border rounded mb-4"
-        placeholder="Email"
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-black text-white py-2 rounded disabled:opacity-50"
+    <div className="min-h-screen">
+
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow"
       >
-        {loading ? "Requesting..." : "Request Password Reset"}
-      </button>
-    </form>
+        <h1 className="text-2xl font-bold mb-4">Request Password Reset</h1>
+        <label className="block mb-2">Email</label>
+        <input
+          className="w-full p-2 border rounded mb-4"
+          placeholder="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-black text-white py-2 rounded disabled:opacity-50"
+        >
+          {loading ? "Requesting..." : "Request Password Reset"}
+        </button>
+      </form>
+    </div>
   )
 }
