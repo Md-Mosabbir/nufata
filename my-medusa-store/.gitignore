@@ -8,7 +8,7 @@ yarn-error.log
 .idea
 
 coverage
-
+medusa_dump.sql
 !src/**
 
 ./tsconfig.tsbuildinfo
