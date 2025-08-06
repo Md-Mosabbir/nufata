@@ -62,7 +62,6 @@ jobs:
         run: |
           cd medusa-server
           npm install --omit=dev
-          npm install @medusajs/cli
 
       # Step 3: Login to Azure
       - name: Login to Azure
