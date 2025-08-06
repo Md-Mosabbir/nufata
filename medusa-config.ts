@@ -4,6 +4,7 @@ loadEnv(process.env.NODE_ENV || 'development', process.cwd());
 
 module.exports = defineConfig({
   projectConfig: {
+    redisUrl: process.env.REDIS_URL,
     databaseUrl: process.env.DATABASE_URL,
     http: {
       storeCors: process.env.STORE_CORS!,
@@ -12,19 +13,16 @@ module.exports = defineConfig({
       jwtSecret: process.env.JWT_SECRET || "supersecret",
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     }
-  },  
+  },
 
   modules: [
- 
     {
-
-      resolve: "./src/modules/product-review"
-
+      resolve: "./src/modules/product-review",
     },
     {
       resolve: "./src/modules/ingredient",
     },
-        {
+    {
       resolve: "@medusajs/medusa/notification",
       options: {
         providers: [
@@ -39,9 +37,8 @@ module.exports = defineConfig({
           },
         ],
       },
-    },  
-
-{
+    },
+    {
       resolve: "@medusajs/medusa/file",
       options: {
         providers: [
@@ -58,13 +55,46 @@ module.exports = defineConfig({
               additional_client_config: {
                 forcePathStyle: true,
               },
-
-              // other options...
             },
           },
         ],
       },
     },
 
-  ],
+    {
+      resolve: "@medusajs/medusa/cache-redis",
+      options: {
+        redisUrl: process.env.REDIS_URL,
+      },
+    },
+    {
+      resolve: "@medusajs/medusa/event-bus-redis",
+      options: {
+        redisUrl: process.env.REDIS_URL,
+      },
+    },
+    {
+      resolve: "@medusajs/medusa/workflow-engine-redis",
+      options: {
+        redis: {
+          url: process.env.REDIS_URL,
+        },
+      },
+    },
+    {
+      resolve: "@medusajs/medusa/locking",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/medusa/locking-redis",
+            id: "locking-redis",
+            is_default: true,
+            options: {
+              redisUrl: process.env.REDIS_URL,
+            },
+          },
+        ],
+      },
+    },
+  ]
 });

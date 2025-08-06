@@ -1,0 +1,80 @@
+name: Build and deploy Medusa to Azure Web App - nufatahs
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      # Step 3: Install Medusa CLI globally
+      - name: Install Medusa CLI
+        run: npm install -g @medusajs/medusa-cli
+
+      # Step 4: Install root dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 5: Build the Medusa app (creates .medusa/server)
+      - name: Build Medusa app
+        run: npx medusa build
+
+      # Step 6: Upload the built server as artifact
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: medusa-server
+          path: .medusa/server
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      # Step 1: Download the build artifact
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: medusa-server
+          path: ./medusa-server
+
+      # Step 2: Install server dependencies
+      - name: Install server dependencies
+        run: |
+          cd medusa-server
+          npm install --omit=dev
+
+      # Step 3: Login to Azure
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_46D751461C6844F1958418165495C820 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_961D91E533564A6FB33A3C6D35588C45 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_ECB2C30244434266A67C73E6867C0109 }}
+
+      # Step 4: Deploy to Azure Web App
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'nufatahs'
+          slot-name: 'Production'
+          package: ./medusa-server
