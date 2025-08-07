@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  medusa:
+    build: .
+    container_name: medusa_backend
+    ports:
+      - "9000:9000"
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env
+    volumes:
+      - .:/server
