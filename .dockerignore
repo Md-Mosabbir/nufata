@@ -7,6 +7,8 @@ yarn-error.log*
 README.md
 .env.test
 .nyc_output
+.env
+.env.production
 coverage
 .DS_Store
 *.log

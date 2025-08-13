@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  medusa:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    env_file:
+      - .env 
+    ports:
+      - "9000:9000"
