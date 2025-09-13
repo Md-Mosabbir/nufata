@@ -20,6 +20,103 @@ type DeliveryCreatedEmailProps = {
   isAdmin?: boolean
 }
 
+/* ------------------------
+   Reusable Components
+-------------------------*/
+
+function AdminBanner() {
+  return (
+    <Section className="bg-yellow-500 text-black px-6 py-2 text-center font-bold uppercase tracking-wider">
+      🚨 Admin Notification 🚨
+    </Section>
+  )
+}
+
+function EmailHeader() {
+  return (
+    <Section className="bg-[#b91c1c] text-white px-6 py-4">
+      <Heading className="text-xl font-bold tracking-wide">NUFATA'S</Heading>
+    </Section>
+  )
+}
+
+function EmailMessage({ isAdmin, order }: { isAdmin?: boolean; order: OrderDTO }) {
+  return (
+    <Container className="p-6">
+      <Heading className="text-2xl font-bold text-center text-[#b91c1c]">
+        {isAdmin
+          ? `Order #${order.display_id} Has Been Delivered`
+          : `Your Order Has Been Delivered!`}
+      </Heading>
+      <Text className="text-center text-gray-700 mt-2">
+        {isAdmin
+          ? "The order has been delivered to the customer."
+          : "Great news! Your order has arrived. We hope you enjoy the delicious taste of NUFATA'S!"}
+      </Text>
+    </Container>
+  )
+}
+
+function OrderInfo({ order }: { order: OrderDTO }) {
+  return (
+    <Section className="mt-8">
+      <Heading className="text-xl font-semibold text-gray-800 mb-4">
+        Order Information
+      </Heading>
+      <Row className="text-gray-600">
+        <Column className="w-1/2">
+          <Text className="m-0">Order ID</Text>
+        </Column>
+        <Column className="w-1/2 text-right">
+          <Text className="m-0">#{order.display_id}</Text>
+        </Column>
+      </Row>
+    </Section>
+  )
+}
+
+function CustomerInfo({ order }: { order: OrderDTO & { customer: CustomerDTO } }) {
+  return (
+    <Section className="mt-8">
+      <Heading className="text-xl font-semibold text-gray-800 mb-4">
+        Customer Information
+      </Heading>
+      <Row className="text-gray-600">
+        <Column className="w-1/2"><Text>Name</Text></Column>
+        <Column className="w-1/2 text-right">
+          <Text>{order.customer?.first_name} {order.customer?.last_name}</Text>
+        </Column>
+      </Row>
+      <Row className="text-gray-600">
+        <Column className="w-1/2"><Text>Email</Text></Column>
+        <Column className="w-1/2 text-right"><Text>{order.email}</Text></Column>
+      </Row>
+    </Section>
+  )
+}
+
+function EmailFooter({ isAdmin, order }: { isAdmin?: boolean; order: OrderDTO }) {
+  return (
+    <Section className="bg-[#fef3c7] p-6 mt-10 rounded-b">
+      <Text className="text-center text-[#92400e] text-sm">
+        {isAdmin
+          ? "This is an automated delivery notification for administrators of NUFATA'S."
+          : "If you have any questions, feel free to message us on our Facebook page."}
+      </Text>
+      <Text className="text-center text-[#a16207] text-sm">
+        Order Token: {order.id}
+      </Text>
+      <Text className="text-center text-[#a3a3a3] text-xs mt-4">
+        © {new Date().getFullYear()} NUFATA'S — Homemade Pithas & Desserts from the heart of Bangladesh.
+      </Text>
+    </Section>
+  )
+}
+
+/* ------------------------
+   Main Component
+-------------------------*/
+
 function DeliveryCreatedEmailComponent({ order, isAdmin }: DeliveryCreatedEmailProps) {
   return (
     <Tailwind>
@@ -27,85 +124,20 @@ function DeliveryCreatedEmailComponent({ order, isAdmin }: DeliveryCreatedEmailP
         <Head />
         <Preview>
           {isAdmin
-            ? `Order #${order.display_id} Has Been Delivered`
+            ? `Order #${order.display_id} Has Been Delivered (Admin)`
             : "Your Order from NUFATA'S Has Been Delivered!"}
         </Preview>
         <Body className="bg-white my-10 mx-auto w-full max-w-2xl rounded shadow-md border border-[#facc15]">
-          {/* Header */}
-          <Section className="bg-[#b91c1c] text-white px-6 py-4">
-            <Heading className="text-xl font-bold tracking-wide">
-              NUFATA'S
-            </Heading>
-          </Section>
+          {isAdmin && <AdminBanner />}
+          <EmailHeader />
+          <EmailMessage isAdmin={isAdmin} order={order} />
 
-          {/* Message */}
-          <Container className="p-6">
-            <Heading className="text-2xl font-bold text-center text-[#b91c1c]">
-              {isAdmin
-                ? `Order #${order.display_id} Has Been Delivered`
-                : `Your Order Has Been Delivered!`}
-            </Heading>
-            <Text className="text-center text-gray-700 mt-2">
-              {isAdmin
-                ? `The order has been delivered to the customer.`
-                : `Great news! Your order has arrived. We hope you enjoy the delicious taste of NUFATA'S!`}
-            </Text>
-          </Container>
-
-          {/* Order Information */}
           <Container className="px-6">
-            <Section className="mt-8">
-              <Heading className="text-xl font-semibold text-gray-800 mb-4">
-                Order Information
-              </Heading>
-              <Row className="text-gray-600">
-                <Column className="w-1/2">
-                  <Text className="m-0">Order ID</Text>
-                </Column>
-                <Column className="w-1/2 text-right">
-                  <Text className="m-0">#{order.display_id}</Text>
-                </Column>
-              </Row>
-            </Section>
-
-            {/* Admin-only: Customer Info */}
-            {isAdmin && (
-              <Section className="mt-8">
-                <Heading className="text-xl font-semibold text-gray-800 mb-4">
-                  Customer Information
-                </Heading>
-                <Row className="text-gray-600">
-                  <Column className="w-1/2"><Text className="m-0">Name</Text></Column>
-                  <Column className="w-1/2 text-right">
-                    <Text className="m-0">
-                      {order.customer?.first_name} {order.customer?.last_name}
-                    </Text>
-                  </Column>
-                </Row>
-                <Row className="text-gray-600">
-                  <Column className="w-1/2"><Text className="m-0">Email</Text></Column>
-                  <Column className="w-1/2 text-right">
-                    <Text className="m-0">{order.email}</Text>
-                  </Column>
-                </Row>
-              </Section>
-            )}
+            <OrderInfo order={order} />
+            {isAdmin && <CustomerInfo order={order} />}
           </Container>
 
-          {/* Footer */}
-          <Section className="bg-[#fef3c7] p-6 mt-10 rounded-b">
-            <Text className="text-center text-[#92400e] text-sm">
-              {isAdmin
-                ? "This is an automated delivery notification from NUFATA'S."
-                : "If you have any questions, feel free to message us on our Facebook page."}
-            </Text>
-            <Text className="text-center text-[#a16207] text-sm">
-              Order Token: {order.id}
-            </Text>
-            <Text className="text-center text-[#a3a3a3] text-xs mt-4">
-              © {new Date().getFullYear()} NUFATA'S — Homemade Pithas & Desserts from the heart of Bangladesh.
-            </Text>
-          </Section>
+          <EmailFooter isAdmin={isAdmin} order={order} />
         </Body>
       </Html>
     </Tailwind>

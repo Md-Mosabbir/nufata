@@ -1,10 +1,24 @@
 version: "3.8"
+
 services:
-  medusa:
+  medusa-server:
     build:
       context: .
       dockerfile: Dockerfile.prod
     env_file:
-      - .env 
+      - .env
+    environment:
+      DISABLE_MEDUSA_ADMIN: "false"
+      MEDUSA_WORKER_MODE: "server"
     ports:
       - "9000:9000"
+
+  medusa-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    env_file:
+      - .env
+    environment:
+      DISABLE_MEDUSA_ADMIN: "true"
+      MEDUSA_WORKER_MODE: "worker"

@@ -1,20 +1,19 @@
-import { 
-  AbstractNotificationProviderService, 
+import {
+  AbstractNotificationProviderService,
   MedusaError
 } from "@medusajs/framework/utils"
-import { 
-  ProviderSendNotificationDTO, 
+import {
+  ProviderSendNotificationDTO,
   ProviderSendNotificationResultsDTO,
   Logger
 } from "@medusajs/framework/types";
-import { 
-  CreateEmailOptions, 
+import {
+  CreateEmailOptions,
   Resend
 } from "resend";
 import { orderPlacedEmail } from "./emails/order-placed";
 import { orderStatusUpdateEmail } from "./emails/order-status-update";
 import { resetPasswordEmail } from "./emails/reset-password";
-import { shipmentCreatedEmail } from "./emails/shipment-created";
 import { deliveryCreatedEmail } from "./emails/delivery-created";
 
 enum Templates {
@@ -25,11 +24,10 @@ enum Templates {
   DELIVERY_CREATED = "delivery-created",
 }
 
-const templates: {[key in Templates]?: (props: unknown) => React.ReactNode} = {
+const templates: { [key in Templates]?: (props: unknown) => React.ReactNode } = {
   [Templates.ORDER_PLACED]: orderPlacedEmail,
   [Templates.ORDER_STATUS_UPDATE]: orderStatusUpdateEmail,
   [Templates.RESET_PASSWORD]: resetPasswordEmail,
-  [Templates.SHIPMENT_CREATED]: shipmentCreatedEmail,
   [Templates.DELIVERY_CREATED]: deliveryCreatedEmail,
 }
 
@@ -53,7 +51,7 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
   private logger: Logger
 
   constructor(
-    { logger }: InjectedDependencies, 
+    { logger }: InjectedDependencies,
     options: ResendOptions
   ) {
     super()
@@ -94,7 +92,7 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
     if (this.options.html_templates?.[template]?.subject) {
       return this.options.html_templates[template].subject
     }
-    switch(template) {
+    switch (template) {
       case Templates.ORDER_PLACED:
         return "Order Confirmation"
       case Templates.ORDER_STATUS_UPDATE:
