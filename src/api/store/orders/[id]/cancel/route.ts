@@ -1,11 +1,20 @@
-import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { cancelOrderWorkflow } from "@medusajs/medusa/core-flows"
+import { Modules } from "@medusajs/framework/utils"
 
-export async function POST(req: MedusaRequest, res: MedusaResponse) {
-  const orderId = req.params.id
- 
-  const { result } = await cancelOrderWorkflow(req.scope).run({
-    input: { order_id: orderId }
+// Register the hook somewhere during your app's initialization
+cancelOrderWorkflow.hooks.orderCanceled(async ({ order }, { container }) => {
+  const notificationModuleService = container.resolve(Modules.NOTIFICATION)
+  await notificationModuleService.createNotifications({
+    to: order.email,
+    channel: "email",
+    template: "order-cancel", // Your template ID
+    data: { order, isAdmin: false },
   })
-  res.send(result)
-}
+  // Optionally, send to admin as well
+  await notificationModuleService.createNotifications({
+    to: process.env.ADMIN_EMAIL || "",
+    channel: "email",
+    template: "order-cancel",
+    data: { order, isAdmin: true },
+  })
+})

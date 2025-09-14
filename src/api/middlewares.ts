@@ -17,6 +17,13 @@ import { GetStoreReviewsSchema } from "./store/products/[id]/reviews/route"
 export default defineMiddlewares({
   routes: [
     {
+      matcher: "/admin/email-notifications*",
+      middlewares: [
+        authenticate("user", ["session", "bearer"]),
+      ],
+    },
+
+    {
       matcher: "/store/reviews",
       method: ["POST"],
       middlewares: [

@@ -7,11 +7,11 @@ export default async function deliveryCreatedHandler({
 }: SubscriberArgs<{ id: string }>) {
 
 
-  await sendDeliveryNotificationWorkflow(container).run({
-    input: {
-      id: data.id,
-    },
-  })
+  // await sendDeliveryNotificationWorkflow(container).run({
+  //   input: {
+  //     id: data.id,
+  //   },
+  // })
 }
 
 export const config: SubscriberConfig = {
