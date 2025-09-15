@@ -1,8 +1,8 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { Modules } from "@medusajs/framework/utils"
 type ShipEmailReq = {
-  orderId: string
-  customerEmail: string
+	orderId: string
+	customerEmail: string
 }
 export const POST = async (req: MedusaRequest<ShipEmailReq>, res: MedusaResponse) => {
 	const { orderId, customerEmail } = req.body
@@ -30,6 +30,8 @@ export const POST = async (req: MedusaRequest<ShipEmailReq>, res: MedusaResponse
 			"tax_total",
 			"subtotal",
 			"discount_total",
+			"fulfillments.*",           // <-- Add this line
+			"fulfillments.labels.*",    // <-- And this line to get tracking info
 			// add any other fields your template needs
 		],
 		filters: { id: orderId },
