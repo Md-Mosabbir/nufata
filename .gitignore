@@ -1,4 +1,5 @@
 /dist
+/.medusa
 .env
 .DS_Store
 /uploads
